@@ -1,0 +1,167 @@
+Global:
+  Access: release
+  Region: cn-hangzhou
+  Service:
+    Name: FcOssFFmpeg
+    Description: Scenarios that can be solved by OSS + FC
+    InternetAccess: true
+    Handler: index.handler
+    Role:
+      Name: FcOssFFmpegRole
+      Policies:
+        - AliyunOSSFullAccess
+        - AliyunFCFullAccess
+  Runtime: python3
+  Timeout: 600
+  Includes:
+    - ./ffmpeg
+    - ./ffprobe
+
+AudioConvert:
+  Component: fc
+  Provider: alibaba
+  Access: ${Global.Access}
+  Properties:
+    Region: ${Global.Region}
+    Service: ${Global.Service}
+    Function:
+      Name: AudioConvert
+      Description: 音频格式转换器
+      CodeUri:
+        Src: ./functions/audio_convert
+        Includes: ${Global.Includes}
+      Handler: ${Global.Handler}
+      MemorySize: 256
+      Runtime: ${Global.Runtime}
+      Timeout: ${Global.Timeout}
+
+GetMediaMeta:
+  Component: fc
+  Provider: alibaba
+  Access: ${Global.Access}
+  Properties:
+    Region: ${Global.Region}
+    Service: ${Global.Service}
+    Function:
+      Name: GetMediaMeta
+      Description: 获取音视频 meta
+      CodeUri:
+        Src: ./functions/get_multimedia_meta
+        Includes: ${Global.Includes}
+      Handler: master.handler
+      MemorySize: 1024
+      Runtime: ${Global.Handler}
+      Timeout: ${Global.Timeout}
+
+TranscodeMaster:
+  Component: fc
+  Provider: alibaba
+  Access: ${Global.Access}
+  Properties:
+    Region: ${Global.Region}
+    Service: ${Global.Service}
+    Function:
+      Name: TranscodeMaster
+      Description: 功能强大的并行视频转码器
+      CodeUri:
+        Src: ./functions/transcode/master
+        Includes: ${Global.Includes}
+      Handler: master.handler
+      MemorySize: 1024
+      Runtime: ${Global.Runtime}
+      Timeout: ${Global.Timeout}
+
+TranscodeWorker:
+  Component: fc
+  Provider: alibaba
+  Access: ${Global.Access}
+  Properties:
+    Region: ${Global.Region}
+    Service: ${Global.Service}
+    Function:
+      Name: TranscodeWorker
+      Description: 功能强大的并行视频转码器
+      CodeUri:
+        Src: ./functions/transcode/worker
+        Includes: ${Global.Includes}
+      Handler: ${Global.Handler}
+      MemorySize: 3072
+      Runtime: ${Global.Runtime}
+      Timeout: ${Global.Timeout}
+
+GetDuration:
+  Component: fc
+  Provider: alibaba
+  Access: ${Global.Access}
+  Properties:
+    Region: ${Global.Region}
+    Service: ${Global.Service}
+    Function:
+      Name: GetDuration
+      Description: 获取音视频时长
+      CodeUri:
+        Src: ./functions/get_duration
+        Includes: ${Global.Includes}
+      Handler: ${Global.Handler}
+      MemorySize: 256
+      Runtime: ${Global.Runtime}
+      Timeout: ${Global.Timeout}
+      Environment:
+        - Key: FFPROBE_BIN_KEY
+          Value: binary/ffprobe
+        - Key: FFPROBE_BUKCET_NAME
+          Value: fc-hz-demo
+
+VideoGif:
+  Component: fc
+  Provider: alibaba
+  Access: ${Global.Access}
+  Properties:
+    Region: ${Global.Region}
+    Service: ${Global.Service}
+    Function:
+      Name: VideoGif
+      Description: 功能强大的 video 提取为 gif 函数
+      CodeUri:
+        Src: ./functions/video_gif
+        Includes: ${Global.Includes}
+      Handler: ${Global.Handler}
+      MemorySize: 512
+      Runtime: ${Global.Runtime}
+      Timeout: ${Global.Timeout}
+
+GetSprites:
+  Component: fc
+  Provider: alibaba
+  Access: ${Global.Access}
+  Properties:
+    Region: ${Global.Region}
+    Service: ${Global.Service}
+    Function:
+      Name: GetSprites
+      Description: 功能强大雪碧图制作函数
+      CodeUri:
+        Src: ./functions/get_sprites
+        Includes: ${Global.Includes}
+      Handler: ${Global.Handler}
+      MemorySize: 512
+      Runtime: ${Global.Runtime}
+      Timeout: ${Global.Timeout}
+
+VideoWatermark:
+  Component: fc
+  Provider: alibaba
+  Access: ${Global.Access}
+  Properties:
+    Region: ${Global.Region}
+    Service: ${Global.Service}
+    Function:
+      Name: VideoWatermark
+      Description: 功能强大的视频添加水印功能
+      CodeUri:
+        Src: ./functions/video_watermark
+        Includes: ${Global.Includes}
+      Handler: ${Global.Handler}
+      MemorySize: 256
+      Runtime: ${Global.Runtime}
+      Timeout: ${Global.Timeout}
